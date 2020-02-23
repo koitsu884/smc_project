@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+
+{% load star_tags %}
+
+{% block title %} | {{ car.title }} {% endblock %}
+
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/lightbox.css' %}">
+{% endblock %}
+{% block content %}
+<!-- Breadcrumb -->
+<section id="bc" class="mt-3">
+  <div class="container">
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'index' %}">{% trans 'Home' %}</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'search' %}">{% trans 'Car Search' %}</a>
+        </li>
+        <li class="breadcrumb-item active">{{ car.title }}</li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
+<!-- Alerts -->
+{% include 'partials/_alerts.html' %}
+
+<!-- car -->
+<section id="car_detail" class="py-4">
+  <div class="container">
+    <h1>{{car.title}}</h1>
+    <div class="row">
+      <div class="col-md-7 col-lg-8">
+        <!-- Home Main Image -->
+        <img src="{{ car.photo_main.url }}" alt="" class="img-main img-fluid mb-3">
+        <!-- Thumbnails -->
+        <div class="row mb-5 thumbs">
+          {% for photo in car.photos.all %}
+          <div class="col-3 col-md-2">
+            <a href="{{ photo.image.url }}" data-lightbox="car-images">
+              <img src="{{ photo.image.url }}" alt="" class="img-fluid">
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col-md-5 col-lg-4">
+        <h5 class="mt-2 mb-4"><span class="price">${{car.price | intcomma}}</span> +ORC</h5>
+        <section id="specs" class="row mb-5 fields">
+          <div class="container">
+            <h3>Key details</h3>
+            <div class="item">
+              <div class="left">Year</div>
+              <div>{{ car.year }}</div>
+            </div>
+            <div class="item">
+              <div class="left">ODO</div>
+              <div>{{ car.odo | intcomma }} km</div>
+            </div>
+            <div class="item">
+              <div class="left">Transmission</div>
+              <div>{{ car.get_transmission_display }}</div>
+            </div>
+            <div class="item">
+              <div class="left">Fuel Type</div>
+              <div>{{ car.get_energy_source_display }}</div>
+            </div>
+            <div class="item">
+              <div class="left">Color</div>
+              <div>{{ car.color }}</div>
+            </div>
+            <div class="item">
+              <div class="left">Body Type</div>
+              <div>{{ car.get_body_type_display }} {{ car.doors }} Door</div>
+            </div>
+            <div class="item">
+              <div class="left">Seats</div>
+              <div>{{ car.seats }} seats</div>
+            </div>
+            <div class="item">
+              <div class="left">Fuelsaver</div>
+              <div>
+                <div>
+                  {% show_stars car.fuel_rate 6 %}
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="left">Safety rating</div>
+              <div>
+                <div>
+                  {% show_stars car.safety_rate 5 %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <section id="features">
+      <div class="container">
+        <h3>Features</h3>
+        <div class="row">
+          {% for feature in car.features.all %}
+          <div class="col-6 col-sm-4 col-md-3">
+            <i class="fas fa-check-square text-success"></i>
+            {{ feature.name }}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/lightbox.min.js' %} "></script>
+<script>
+  lightbox.option({
+    'alwaysShowNavOnTouchDevices': true
+  })
+</script>
+{% endblock %}

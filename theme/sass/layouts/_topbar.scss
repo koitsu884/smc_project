@@ -1,0 +1,40 @@
+#top-bar {
+    .container {
+        display: flex;
+        align-items: center;  
+     
+        .logo {
+            height: 3rem;
+            margin: 1rem;
+        }
+
+        .contact {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            margin: 1rem;
+            font-size: 1.6rem;
+        }
+
+        .sns{
+            font-size: 2rem;
+        }
+
+        @include media-breakpoint-down(sm) {
+            .logo {
+                height: 2.5rem;
+                margin: 1rem;
+            }
+    
+            .contact {
+                flex-grow: 1;
+                margin: 1rem;
+                font-size: 1.3rem;
+            }
+    
+            .sns{
+                font-size: 1.5rem;
+            }
+        }
+    }
+}

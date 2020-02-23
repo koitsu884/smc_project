@@ -1,0 +1,30 @@
+[
+    {
+        "model": "cars.CarModel",
+        "pk": 1,
+        "fields": {
+            "name": "Toyota"
+        }
+    },
+    {
+        "model": "common.CarModel",
+        "pk": 2,
+        "fields": {
+            "name": "Honda"
+        }
+    },
+    {
+        "model": "common.CarModel",
+        "pk": 3,
+        "fields": {
+            "name": "Mazda"
+        }
+    },
+    {
+        "model": "common.CarModel",
+        "pk": 4,
+        "fields": {
+            "name": "BMW"
+        }
+    }
+]

@@ -1,0 +1,28 @@
+#car_detail{
+    h1 {
+        padding-bottom: 4px;
+        border-bottom: 2px solid  theme-color("secondary");
+    }
+
+    .price {
+        font-size: 2.2rem;
+        font-weight: 700;
+        text-align: center;
+        color: theme-color("success");
+    }
+}
+
+#specs{
+    .item {
+        display: flex;
+        padding: .4rem 0;
+        width: 100%;
+        .left {
+            width: 8rem;
+            color: theme-color("secondary");
+            font-weight: 700;
+        }
+
+        &:nth-child(even){background-color: theme-color("light")};
+    }
+}

@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/carousel.css' %}">
+{% endblock %}
+{% block content %}
+{% get_current_language as LANGUAGE_CODE %}
+<section id="showcase">
+    <div class="container text-center">
+        <div class="home-search p-5">
+            <div class="overlay p-5">
+                <h1 class="display-4 mb-4">Smart Cars Smart Choice</h1>
+                <p class="lead">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Recusandae quas, asperiores
+                    eveniet vel nostrum magnam
+                    voluptatum tempore! Consectetur, id commodi!</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="listings" class="py-5">
+    <div class="container">
+        <h3 class="text-center mb-3">{% trans 'Latest Listings' %}</h3>
+        <div class="container-fluid">
+            {% if cars|length > 4 %}
+            <div class="carousel slide" id="latestListCarousel" data-ride="carousel">
+                <div class="carousel-inner row w-100 mx-auto" role="listbox">
+                    {% for car in cars %}
+                    <div {% if forloop.counter == 1 %} class="carousel-item col-12 col-md-6 col-lg-4 active"
+                        {% else %} class="carousel-item col-12 col-md-6 col-lg-4" {% endif %}>
+                        <div class="card mx-auto d-block">
+                            <img class="card-img-top" src="{{ car.photo_main.url }}" alt="{{ car.title }}">
+                            <h3 class="card-header">{{ car.title }}</h3>
+                            <h5 class="text-center text-success m-3"><i>${{ car.price | intcomma }}</i></h5>
+                            <hr />
+                            <div class="p-2 row">
+                                <div class="col-6 mb-1"><i class="fas fa-tachometer-alt mr-2"></i>{{ car.odo | intcomma }} km</div>
+                                <div class="col-6 mb-1"><i class="fas fa-cogs mr-2"></i>{{ car.get_transmission_display }}</div>
+                                <div class="col-6 mb-1"><i class="fas fa-gas-pump mr-2"></i>{{ car.get_energy_source_display }}</div>
+                                <div class="col-6 mb-1"><i class="fas fa-calendar-alt mr-2"></i>{{ car.year }}</div>
+                            </div>
+                            <hr>
+                            <a href="{% url 'car_details' car.id %}" class="btn btn-primary btn-block">More
+                                Info</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <a class="carousel-control-prev" href="#latestListCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="false"></span>
+                    <span class="sr-only text-danger">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#latestListCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="false"></span>
+                    <span class="sr-only text-danger">Next</span>
+                </a>
+            </div>
+            {% else %}
+            <div>Please add at least 5 car data</div>
+            {% endif%}
+        </div>
+    </div>
+</section>
+<section id="about" class="py-5 text-white">
+    <div class="container inside">
+        <h2 class="text-center mb-3">Welcome to Smart Choice Cars</h2>
+        <p>
+            Buying a vehicle is a very important purchasing decision and requires a great deal of trust.
+
+            For years people from around the country have put their trust in Paul Kelly Motor Company and we have built
+            a name entirely upon the strength of our service and the quality of our vehicles.
+
+            Because of the amount we sell, if you don’t find what you are looking for let us know – it might just be
+            arriving in the next shipment… We look forward to doing business with you.
+        </p>
+    </div>
+</section>
+<section id="services" class="py-5">
+    <div class="container">
+        <h3 class="text-center mb-3">{% trans 'Our Services' %}</h3>
+        <div class="row">
+            {% if services %}
+            {% for service in services %}
+            <div class="col-md-6 mb-6">
+                <div class="card text-white mb-4">
+                    <img src="{{ service.photo_main.url }}" alt="{{service.title}}" class="card-img">
+                    <div class="card-img-overlay">
+                        {% if LANGUAGE_CODE == 'ja' %}
+                        <h4 class="card-title">
+                            {{service.title_ja}}
+                        </h4>
+                        <p class="card-text">{{service.description_ja}}</p>
+                        {% elif LANGUAGE_CODE == 'zh-cn' %}
+                        <h4 class="card-title">
+                            {{service.title_zh}}
+                        </h4>
+                        <p class="card-text">{{service.description_zh}}</p>
+                        {% elif LANGUAGE_CODE == 'ko' %}
+                        <h4 class="card-title">
+                            {{service.title_ko}}
+                        </h4>
+                        <p class="card-text">{{service.description_ko}}</p>
+                        {% else %}
+                        <h4 class="card-title">
+                            {{service.title}}
+                        </h4>
+                        <p class="card-text">{{service.description}}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div>Please set "display_top" flag to some services </div>
+            {% endif %}
+        </div>
+        <div class="text-center">
+            <a href="{% url 'services' %}" class="btn btn-primary m-auto">And more...</a>
+        </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'js/carousel.js' %} "></script>
+{% endblock %}

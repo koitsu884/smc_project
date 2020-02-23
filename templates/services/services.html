@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<section id="services-top">
+    <div class="container">
+        <div class="overlay">
+            <h1>{% trans 'Services' %}</h1>
+        </div>
+    </div>
+</section>
+
+<!-- Breadcrumb -->
+<section id="bc" class="mt-3">
+    <div class="container">
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'index' %}">{% trans 'Home' %}</a>
+                </li>
+                <li class="breadcrumb-item active">{% trans 'Services' %}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+<section id="services" class="py-4">
+    <div class="container">
+        {% for service in services %}
+        <div class="serviceCard {% if forloop.counter0|divisibleby:2 == False %}fromRight{% endif %}">
+            <div class="serviceCard__image">
+                <img src="{{ service.photo_main.url}}" alt="{{service.title}}">
+            </div>
+            <div class="serviceCard__body">
+                {% if LANGUAGE_CODE == 'ja' %}
+                <h5 class="serviceCard__title">
+                    {{service.title_ja}}
+                </h5>
+                <p class="serviceCard__text">{{service.description_ja}}</p>
+                {% elif LANGUAGE_CODE == 'zh-cn' %}
+                <h5 class="serviceCard__title">
+                    {{service.title_zh}}
+                </h5>
+                <p class="serviceCard__text">{{service.description_zh}}</p>
+                {% elif LANGUAGE_CODE == 'ko' %}
+                <h5 class="serviceCard__title">
+                    {{service.title_ko}}
+                </h5>
+                <p class="serviceCard__text">{{service.description_ko}}</p>
+                {% else %}
+                <h5 class="serviceCard__title">
+                    {{service.title}}
+                </h5>
+                <p class="serviceCard__text">{{service.description}}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

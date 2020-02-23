@@ -1,0 +1,16 @@
+{% load mathfilters %}
+<div>
+    {% with ''|center:num as range %}
+    {% for _ in range %}
+        <i 
+            {% if forloop.counter <= rate %}
+                class="fas fa-star text-warning"
+            {% elif forloop.counter|sub:rate < 1 %}
+                class="fas fa-star-half-alt text-warning"
+            {% else %}
+                class="far fa-star"
+            {% endif %}
+        ></i>
+    {% endfor %}
+    {% endwith %}
+</div>

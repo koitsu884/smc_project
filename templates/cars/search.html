@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+{% block title %} | Browse Car Listings {% endblock %}
+
+{% block content %}
+<section class="py-5 text-white" id="search">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <form action="{% url 'search' %}" id="searchForm" data-models-url="{% url 'ajax_load_models' %}">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="id__model__manufacturer">{% trans 'Make' %}</label>
+                            {{ form.model__manufacturer|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="model">{% trans 'Model' %}</label>
+                            <select name="model__name" id="model" class="form-control">
+                                <option selected="true" value="">--------</option>
+                                {% if model_choices %}
+                                {% for carmodel in model_choices %}
+                                <option value="{{ carmodel.name }}" {% if selected_model == carmodel.name %} selected
+                                    {% endif %}>{{ carmodel.name }}</option>
+                                {% endfor %}
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="id_price__gt">{% trans 'Price From' %}</label>
+                            {{ form.price__gt|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="id_price__lt">{% trans 'Price To' %}</label>
+                            {{ form.price__lt|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="collapse form-row" id="advancedSearch">
+                        <div class="form-group col-md-3">
+                            <label for="id_body_typet">{% trans 'Body Type' %}</label>
+                            {{ form.body_type|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="id_transmission">{% trans 'Transmittion' %}</label>
+                            {{ form.transmission|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="id_year__gt">{% trans 'Year From' %}</label>
+                            {{ form.year__gt|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="id_year__lt">{% trans 'Year To' %}</label>
+                            {{ form.year__lt|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <a data-toggle="collapse" class="btn btn-secondary" id="toggleAdvance"
+                            href="#advancedSearch">Advanced Search<span class="m-1"><i
+                                    class="fas fa-chevron-down"></i></span></a>
+                    </div>
+                    <!-- {{ form|crispy }} -->
+                    <button class="btn btn-primary btn-block mt-4" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Breadcrumb -->
+<section id="bc" class="mt-3">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'index' %}">{% trans 'Home' %}</a>
+                </li>
+                <li class="breadcrumb-item active">{% trans 'Browse Cars' %}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+<div>
+    {{ values }}
+</div>
+
+<!-- Listings -->
+<section id="cars" class="py-4">
+    <div class="container">
+        <div class="row">
+            {% if cars %}
+            {% for car in cars %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card mb-2">
+                    <img class="card-img-top" src="{{ car.photo_main.url }}" alt="{{ car.title }}">
+                    <h3 class="card-title">{{ car.title }}</h3>
+                    <div class="card-body">
+                        <h5 class="text-center text-success mb-2">${{ car.price | intcomma }}</h5>
+                        <div class="p-1">
+                            {{ car.get_body_type_display }}, {{car.engine_size}}cc, {{car.get_energy_source_display}},
+                            {{car.odo | intcomma}}km,
+                            {{ car.get_transmission_display }}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'car_details' car.id %}" class="btn btn-primary btn-block">More
+                            Info</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="col-md-12">
+                <p>No Listings Available</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                {% if cars.has_other_pages %}
+                <ul class="pagination">
+                    {% if cars.has_previous %}
+                    <li class="page-item">
+                        <a href="?page={{cars.previous_page_number}}" class="page-link">&laquo;</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">&laquo;</a>
+                    </li>
+                    {% endif %}
+                    {% for i in cars.paginator.page_range %}
+                    {% if cars.number == i %}
+                    <li class="page-item active">
+                        <a class="page-link">{{i}}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a href="?page={{i}}" class="page-link">{{i}}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if cars.has_next %}
+                    <li class="page-item">
+                        <a href="?page={{cars.next_page_number}}" class="page-link">&raquo;</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">&raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('#advancedSearch').on('hidden.bs.collapse', function () {
+            $('#toggleAdvance span i').attr('class', 'fas fa-chevron-down')
+        })
+
+        $('#advancedSearch').on('shown.bs.collapse', function () {
+            $('#toggleAdvance span i').attr('class', 'fas fa-chevron-up')
+        })
+
+        $("#id_model__manufacturer").change(function () {
+            var url = $("#searchForm").attr("data-models-url");
+            var manufacturer_id = $(this).val();
+
+            $.ajax({
+                url: url,
+                data: {
+                    'manufacturer': manufacturer_id
+                },
+                success: function (data) {
+                    var jsonData = JSON.parse(data);
+                    $('#model').empty().append('<option selected="true" value="">--------</option>')
+                    for (var model of jsonData) {
+                        $('#model').append(`<option value=${model.fields.name}>${model.fields.name}</option>`)
+                    }
+                }
+            })
+        })
+    });
+</script>
+{% endblock %}

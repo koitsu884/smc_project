@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %} | Contact Us {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<section id="contact-top">
+    <div class="container">
+        <div class="overlay">
+            <h1>{% trans 'Contact' %}</h1>
+        </div>
+    </div>
+</section>
+
+<!-- Breadcrumb -->
+<section id="bc" class="mt-3">
+    <div class="container">
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{% url 'index' %}">{% trans 'Home' %}</a>
+                </li>
+                <li class="breadcrumb-item active">{% trans 'Contact' %}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Alerts -->
+{% include 'partials/_alerts.html' %}
+
+<section id="contact-main" class="py-4">
+    <div class="container">
+        <div class="contact-info">
+            <img src="{% static 'img/map.jpg' %}" class="contact-map m-4" alt="map">
+            <div class="m-4">
+                <h4>Contact Details</h4>
+                <div>
+                    <p><b>Mobile:</b> {{ contact_details.mobile }}</p>
+                    <p><b>Phone:</b> {{ contact_details.phone }}</p>
+                    <p><b>Email:</b> {{ contact_details.email }}</p>
+                </div>
+                <hr />
+                <h4>Opening Hours</h4>
+                <table>
+                    <tr><th class="pr-2">Monday</th><td>{{ contact_details.opening_hour_mon }}</td></tr>
+                    <tr><th class="pr-2">Tuesday</th><td>{{ contact_details.opening_hour_tue}}</td></tr>
+                    <tr><th class="pr-2">Wednesday</th><td>{{ contact_details.opening_hour_wed }}</td></tr>
+                    <tr><th class="pr-2">Thursday</th><td>{{ contact_details.opening_hour_thu }}</td></tr>
+                    <tr><th class="pr-2">Friday</th><td>{{ contact_details.opening_hour_fri }}</td></tr>
+                    <tr><th class="pr-2">Saturday</th><td>{{ contact_details.opening_hour_sat }}</td></tr>
+                    <tr><th class="pr-2">Sunday</th><td>{{ contact_details.opening_hour_sun }}</td></tr>
+                </table>
+            </div>
+        </div>
+        <div>hello</div>
+    </div>
+</section>
+<section id="contact-form" class="py-4">
+    <div class="container">
+        <h4>Contact Form</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy}}
+            <button type="submit" class="btn btn-success">Send</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}
