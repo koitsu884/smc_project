@@ -164,3 +164,8 @@ LANGUAGES = [
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
 )
+
+try:
+    from .loacl_settings import *
+except ImportError:
+    pass
