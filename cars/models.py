@@ -38,7 +38,7 @@ class Car(models.Model):
     odo = models.PositiveIntegerField()
     fuel_rate = models.DecimalField(max_digits=2, decimal_places=1, blank=True)
     safety_rate = models.DecimalField(max_digits=2, decimal_places=1, blank=True)
-    fuel_cost = models.DecimalField(max_digits=5, decimal_places=2, blank=True)
+    fuel_cost = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
     color = models.CharField(max_length=20)
     energy_source = models.CharField(
         max_length=20,
